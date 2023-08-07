@@ -1,4 +1,4 @@
-# Coracle - A Machine Learning Framework to Identify Coral Bacteria Associated with Thermal Resilience 
+# Coracle - A Machine Learning Framework to Identify Bacteria Associated with Continous Variables 
 
 cfs.py is an implementation of the Correlation Based Feature Selection by Mark Hall (https://researchcommons.waikato.ac.nz/handle/10289/1024)
 
