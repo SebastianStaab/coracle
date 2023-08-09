@@ -418,8 +418,13 @@ def coracle(x, y, alpha_l1 = 10**(-2.9), alpha_clr = 10**(-0.4)):
     #get relative abundance
     x_l1 = preprocessing.normalize(x, norm="l1")
     #centered log ratio
-    x_clr = np.log(x+1)-np.log(x+1).mean(axis=1, keepdims=True)
-        
+    min_value = np.amin(x)
+    if min_value < 0: #in case of negative values they have to be adjusted since log can't handle negative values
+        x_clr = np.log(x+1+abs(min_value))-np.log(x+1+abs(min_value)).mean(axis=1, keepdims=True)
+        print("negative values have been detected, counts have been adjusted (absolute min value added to all counts) since log can't handle negative values. min value: ", min_value)
+    else: 
+        x_clr = np.log(x+1)-np.log(x+1).mean(axis=1, keepdims=True)
+    
     
     #create some helpfull variables
     models = ["l1_rfr", "l1_lasso_rfr", "l1_alasso_rfr", "l1_cfs_rfr", "clr_rfr", "clr_lasso_rfr", "clr_alasso_rfr", "clr_cfs_rfr", "l1_lasso_coef", "l1_alasso_coef", "clr_lasso_coef", "clr_alasso_coef"]
@@ -513,7 +518,7 @@ def coracle(x, y, alpha_l1 = 10**(-2.9), alpha_clr = 10**(-0.4)):
     intercept = full.loc["Intercept"]
     full = pd.DataFrame(full.iloc[1:])
     full.sort_values(by=['score'], inplace=True, ascending=False) #sort
-    rest = result.append(intercept)
+    rest = pd.concat([result, intercept], ignore_index=True) #result.append(intercept) old
     full_result = pd.concat([rest, full])
     first_column = full_result.pop("score")
     full_result.insert(0, 'score', first_column)
