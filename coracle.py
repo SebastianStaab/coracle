@@ -518,7 +518,7 @@ def coracle(x, y, alpha_l1 = 10**(-2.9), alpha_clr = 10**(-0.4)):
     intercept = full.loc["Intercept"]
     full = pd.DataFrame(full.iloc[1:])
     full.sort_values(by=['score'], inplace=True, ascending=False) #sort
-    rest = pd.concat([result, intercept], ignore_index=True) #result.append(intercept) old
+    rest = pd.concat([result, intercept]) #result.append(intercept) old
     full_result = pd.concat([rest, full])
     first_column = full_result.pop("score")
     full_result.insert(0, 'score', first_column)
