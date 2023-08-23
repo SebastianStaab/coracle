@@ -515,7 +515,7 @@ def coracle(x, y, alpha_l1 = 10**(-2.9), alpha_clr = 10**(-0.4)):
     #merge results to two final documents
     full = feature_importance.merge(coef, left_index=True, right_index=True, how = "right")
     full = score.merge(full, left_index=True, right_index=True, how = "right")
-    intercept = full.loc["Intercept"]
+    intercept = full.loc["Intercept"].to_frame().transpose()
     full = pd.DataFrame(full.iloc[1:])
     full.sort_values(by=['score'], inplace=True, ascending=False) #sort
     rest = pd.concat([result, intercept]) #result.append(intercept) old
