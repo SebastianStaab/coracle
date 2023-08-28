@@ -4,4 +4,4 @@ cfs.py is an implementation of the Correlation Based Feature Selection by Mark H
 
 coracle.py includes the main function, coracle as well as a number of helper functions that are exclusively used by the coracle function.
 
-http://www.micportal.org/coracle/index is an accessible and simple web implementation of the coracle framework.
+https://micportal.org/coracle is an accessible and simple web implementation of the coracle framework.
