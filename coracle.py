@@ -75,7 +75,7 @@ def weighting(x, test_x, weights):
 
 
 
-def alasso_rfr(X, test_X, y, lambdas):
+def alasso_rfr(X, test_X, y, lambdas, random_state=None):
     """
     Train alasso (feature selector) followed by a random forest regressor. 
     Create predicition based on test-x.
@@ -134,14 +134,14 @@ def alasso_rfr(X, test_X, y, lambdas):
         intercept_lasso = lasso.intercept_[0]
         
         #Random Forest Regression alasso
-        rfr = RandomForestRegressor()
+        rfr = RandomForestRegressor(random_state=random_state, n_jobs=1)
         rfr.fit(x_new_alasso, y) #fit with training set
         predict_y_alasso_rfr = rfr.predict(test_x_new_alasso)[0]
         return intercept_lasso, intercept_lasso, predict_y_alasso_rfr, predict_y_alasso
     
     elif (len(index_lasso) > 0) and (len(index_alasso) == 0) : #if no features selected for alasso, return intercept
         #Random Forest Regression lasso
-        rfr = RandomForestRegressor()
+        rfr = RandomForestRegressor(random_state=random_state, n_jobs=1)
         rfr.fit(x_new_lasso, y) #fit with training set
         predict_y_lasso_rfr = rfr.predict(test_x_new_lasso)[0]
         
@@ -150,12 +150,12 @@ def alasso_rfr(X, test_X, y, lambdas):
     
     else: # else train Random Forest Regression with reduced dataset for alasso and lasso
         #Random Forest Regression lasso
-        rfr_lasso = RandomForestRegressor()
+        rfr_lasso = RandomForestRegressor(random_state=random_state, n_jobs=1)
         rfr_lasso.fit(x_new_lasso, y) #fit with training set
         predict_y_lasso_rfr = rfr_lasso.predict(test_x_new_lasso)[0]
         
         #Random Forest Regression alasso
-        rfr_alasso = RandomForestRegressor()
+        rfr_alasso = RandomForestRegressor(random_state=random_state, n_jobs=1)
         rfr_alasso.fit(x_new_alasso, y) #fit with training set
         predict_y_alasso_rfr = rfr_alasso.predict(test_x_new_alasso)[0]
         
@@ -163,7 +163,7 @@ def alasso_rfr(X, test_X, y, lambdas):
         return predict_y_lasso_rfr, predict_y_lasso, predict_y_alasso_rfr, predict_y_alasso
     
 
-def cfs_rfr(X, test_X, y):
+def cfs_rfr(X, test_X, y, random_state=None):
     """
     Train cfs (feature selector) followed by a random forest regressor. 
     Create predicition based on test-x.
@@ -191,7 +191,7 @@ def cfs_rfr(X, test_X, y):
     test_x_new= test_X[:, selection]
      
     #Random Forest Regression
-    rfr = RandomForestRegressor()
+    rfr = RandomForestRegressor(random_state=random_state, n_jobs=1)
     rfr.fit(x_new, y) #fit with training set
     predict_y = rfr.predict(test_x_new)
     
@@ -199,7 +199,7 @@ def cfs_rfr(X, test_X, y):
 
 
 
-def rfr(X, test_X, y):
+def rfr(X, test_X, y, random_state=None):
     """
     Train random forest regressor. 
     Create predicition based on test-x.
@@ -222,7 +222,7 @@ def rfr(X, test_X, y):
     """
 
     # test dataset
-    rfr = RandomForestRegressor()
+    rfr = RandomForestRegressor(random_state=random_state, n_jobs=1)
     rfr.fit(X, y) #fit with training set
     predict_y = rfr.predict(test_X)
     
@@ -230,7 +230,7 @@ def rfr(X, test_X, y):
 
 
 
-def rfr_importance(x, y):
+def rfr_importance(x, y, random_state=None):
     """
     function to return the feature importance via a random forest regressor
 
@@ -246,14 +246,14 @@ def rfr_importance(x, y):
     importance : numpy array
             feature importances
     """
-    rfr = RandomForestRegressor()
+    rfr = RandomForestRegressor(random_state=random_state, n_jobs=1)
     rfr.fit(x, y)
     importance = rfr.feature_importances_
     return importance
 
 
 
-def alasso_rfr_importance(x, y, i):
+def alasso_rfr_importance(x, y, i, random_state=None):
     """
     function to return the feature importance via alasso (feature selector) and random forest regressor
 
@@ -290,7 +290,7 @@ def alasso_rfr_importance(x, y, i):
     x_new_alasso, test_x_new_alasso, index_alasso = weighting(x, x, weight_alasso)
     
     #Random Forest Regression for lasso    
-    rfr_lasso = RandomForestRegressor()
+    rfr_lasso = RandomForestRegressor(random_state=random_state, n_jobs=1)
     rfr_lasso.fit(x_new_lasso, y)
     
     #get importances
@@ -303,7 +303,7 @@ def alasso_rfr_importance(x, y, i):
             
         
     #Random Forest Regression for alasso    
-    rfr_alasso = RandomForestRegressor()
+    rfr_alasso = RandomForestRegressor(random_state=random_state, n_jobs=1)
     rfr_alasso.fit(x_new_alasso, y)
     
     #get importances
@@ -321,7 +321,7 @@ def alasso_rfr_importance(x, y, i):
     return importance_lasso, importance_alasso, lasso_parameter, alasso_parameter
 
 
-def cfs_rfr_importance(x, y):
+def cfs_rfr_importance(x, y, random_state=None):
     """
     function to return the feature importance via a CFS (feature selector) and random forest regressor
 
@@ -342,7 +342,7 @@ def cfs_rfr_importance(x, y):
     x_new = x[:, selec_cfs]
                  
     #Random Forest Regression
-    rfr_ = RandomForestRegressor()
+    rfr_ = RandomForestRegressor(random_state=random_state, n_jobs=1)
     rfr_.fit(x_new, y) #fit with training set
     
     #get importances
@@ -359,7 +359,7 @@ def cfs_rfr_importance(x, y):
 ###
 ### Machine Learning Framework / Ensemble Feature Selection
 ### 
-def coracle(x, y, alpha_l1 = 10**(-2.9), alpha_clr = 10**(-0.4)):
+def coracle(x, y, alpha_l1 = 10**(-2.9), alpha_clr = 10**(-0.4), random_state=None):
     """
     framework to analyse microbiomes. Optimized for the analysis of coral holobiont's 
     microbiome on the family- and order-level.
@@ -376,6 +376,8 @@ def coracle(x, y, alpha_l1 = 10**(-2.9), alpha_clr = 10**(-0.4)):
             lambda/alpha value for clr-lasso traverses. The default is 10**(-0.4) [pre-optimized].
     Alasso : boolean, optional
             Option to turn Adaptive Lasso off as it is a more exotic package. The default is True.
+    random_state : integer, optional
+            seed
 
     Returns
     -------
@@ -402,140 +404,152 @@ def coracle(x, y, alpha_l1 = 10**(-2.9), alpha_clr = 10**(-0.4)):
     if x.ndim != 2 or y.ndim != 2:  
         raise ValueError("ValueError exception thrown. Expected x and y to have two dimensions")
     
-
-    # delete empty columns
-    x = x.loc[:, (x != 0).any(axis=0)]
     
-    # change to numpy and save names
-    microbiome = x.columns.values
-    x = x.to_numpy()
-    y = y.to_numpy()
-    ###########################################################################
+    # BEGIN local deterministic block
+    _np_state = np.random.get_state()
+    try:
+        if random_state is not None:
+            np.random.seed(int(random_state))
+        # ... (rest of coracle body)
     
     
-    ###########################################################################
-    ### 2. Preprocessing
-    ### Normalisation: relative abundance & centered log ratio
+        # delete empty columns
+        x = x.loc[:, (x != 0).any(axis=0)]
+        
+        # change to numpy and save names
+        microbiome = x.columns.values
+        x = x.to_numpy()
+        y = y.to_numpy()
+        ###########################################################################
+        
+        
+        ###########################################################################
+        ### 2. Preprocessing
+        ### Normalisation: relative abundance & centered log ratio
+          
+        #get relative abundance
+        x_l1 = preprocessing.normalize(x, norm="l1")
+        #centered log ratio
+        min_value = np.amin(x)
+        if min_value < 0: #in case of negative values they have to be adjusted since log can't handle negative values
+            x_clr = np.log(x+1+abs(min_value))-np.log(x+1+abs(min_value)).mean(axis=1, keepdims=True)
+            print("negative values have been detected, counts have been adjusted (absolute min value added to all counts) since log can't handle negative values. min value: ", min_value)
+        else: 
+            x_clr = np.log(x+1)-np.log(x+1).mean(axis=1, keepdims=True)
+        
+        
+        #create some helpfull variables
+        models = ["l1_rfr", "l1_lasso_rfr", "l1_alasso_rfr", "l1_cfs_rfr", "clr_rfr", "clr_lasso_rfr", "clr_alasso_rfr", "clr_cfs_rfr", "l1_lasso_coef", "l1_alasso_coef", "clr_lasso_coef", "clr_alasso_coef"]
+        tra = len(models) #number of traverses
+        n = len(y) #number of samples = number of cross validated splits
+        ###########################################################################
+    
+        ###########################################################################
+        ### 3. Leave-One-Out-Cross-Validation
+        loo = LeaveOneOut()
+        loo.get_n_splits(x)
+        
+        y_test_list = np.zeros(n) #store y_test
+        y_predict_list = np.zeros((n, tra), dtype = float) #store predicted y
+        
+        j = 0
+        for train_index, test_index in loo.split(x):
+            
+            #create train/validate sets
+            X_train_l1, X_test_l1 = x_l1[train_index], x_l1[test_index]  #l1
+            X_train_clr, X_test_clr = x_clr[train_index], x_clr[test_index] #clr
+            y_train, y_test = y[train_index], y[test_index]
+            
+            #store y_test
+            y_test_list[j] = y_test
+            
+            
+            ### Models
+            #Random Forest Regression and Lasso
+            #l1
+            y_predict_list[j, 0]  = rfr(X_train_l1, X_test_l1, y_train, random_state=random_state)
+            y_predict_list[j, 1], y_predict_list[j, 8], y_predict_list[j, 2], y_predict_list[j, 9]  = alasso_rfr(X_train_l1, X_test_l1, y_train, alpha_l1, random_state=random_state)
+            y_predict_list[j, 3]  = cfs_rfr(X_train_l1, X_test_l1, y_train, random_state=random_state)
+            #clr
+            y_predict_list[j, 4]  = rfr(X_train_clr, X_test_clr, y_train, random_state=random_state)
+            y_predict_list[j, 5], y_predict_list[j, 10], y_predict_list[j, 6], y_predict_list[j, 11]  = alasso_rfr(X_train_clr, X_test_clr, y_train, alpha_clr, random_state=random_state)
+            y_predict_list[j, 7]  = cfs_rfr(X_train_clr, X_test_clr, y_train, random_state=random_state)
+            
+            print(round((j+1)*100/(n+1)), "%")
+            j+=1
+        ###########################################################################
       
-    #get relative abundance
-    x_l1 = preprocessing.normalize(x, norm="l1")
-    #centered log ratio
-    min_value = np.amin(x)
-    if min_value < 0: #in case of negative values they have to be adjusted since log can't handle negative values
-        x_clr = np.log(x+1+abs(min_value))-np.log(x+1+abs(min_value)).mean(axis=1, keepdims=True)
-        print("negative values have been detected, counts have been adjusted (absolute min value added to all counts) since log can't handle negative values. min value: ", min_value)
-    else: 
-        x_clr = np.log(x+1)-np.log(x+1).mean(axis=1, keepdims=True)
-    
-    
-    #create some helpfull variables
-    models = ["l1_rfr", "l1_lasso_rfr", "l1_alasso_rfr", "l1_cfs_rfr", "clr_rfr", "clr_lasso_rfr", "clr_alasso_rfr", "clr_cfs_rfr", "l1_lasso_coef", "l1_alasso_coef", "clr_lasso_coef", "clr_alasso_coef"]
-    tra = len(models) #number of traverses
-    n = len(y) #number of samples = number of cross validated splits
-    ###########################################################################
-
-    ###########################################################################
-    ### 3. Leave-One-Out-Cross-Validation
-    loo = LeaveOneOut()
-    loo.get_n_splits(x)
-    
-    y_test_list = np.zeros(n) #store y_test
-    y_predict_list = np.zeros((n, tra), dtype = float) #store predicted y
-    
-    j = 0
-    for train_index, test_index in loo.split(x):
+        ###########################################################################
+        ### 4. get RFR importances and lasso/alasso coefficients
+        feature_importance  =  np.zeros((x.shape[1], 8))
+        lasso_parameter  =  np.zeros((x.shape[1]+1, 2))
+        alasso_parameter  =  np.zeros((x.shape[1]+1, 2))
         
-        #create train/validate sets
-        X_train_l1, X_test_l1 = x_l1[train_index], x_l1[test_index]  #l1
-        X_train_clr, X_test_clr = x_clr[train_index], x_clr[test_index] #clr
-        y_train, y_test = y[train_index], y[test_index]
-        
-        #store y_test
-        y_test_list[j] = y_test
-        
-        
-        ### Models
-        #Random Forest Regression and Lasso
         #l1
-        y_predict_list[j, 0]  = rfr(X_train_l1, X_test_l1, y_train)
-        y_predict_list[j, 1], y_predict_list[j, 8], y_predict_list[j, 2], y_predict_list[j, 9]  = alasso_rfr(X_train_l1, X_test_l1, y_train, alpha_l1)
-        y_predict_list[j, 3]  = cfs_rfr(X_train_l1, X_test_l1, y_train)
+        feature_importance[:, 0] = rfr_importance(x_l1, y, random_state=random_state)
+        feature_importance[:, 1], feature_importance[:, 2], lasso_parameter[:,0], alasso_parameter[:,0] = alasso_rfr_importance(x_l1, y, alpha_l1, random_state=random_state)
+        feature_importance[:, 3] = cfs_rfr_importance(x_l1, y, random_state=random_state)
         #clr
-        y_predict_list[j, 4]  = rfr(X_train_clr, X_test_clr, y_train)
-        y_predict_list[j, 5], y_predict_list[j, 10], y_predict_list[j, 6], y_predict_list[j, 11]  = alasso_rfr(X_train_clr, X_test_clr, y_train, alpha_clr)
-        y_predict_list[j, 7]  = cfs_rfr(X_train_clr, X_test_clr, y_train)
+        feature_importance[:, 4] = rfr_importance(x_clr, y, random_state=random_state)
+        feature_importance[:, 5], feature_importance[:, 6], lasso_parameter[:,1], alasso_parameter[:,1] = alasso_rfr_importance(x_clr, y, alpha_clr, random_state=random_state)
+        feature_importance[:, 7] = cfs_rfr_importance(x_clr, y, random_state=random_state)
+        ###########################################################################
         
-        print(round((j+1)*100/(n+1)), "%")
-        j+=1
-    ###########################################################################
-  
-    ###########################################################################
-    ### 4. get RFR importances and lasso/alasso coefficients
-    feature_importance  =  np.zeros((x.shape[1], 8))
-    lasso_parameter  =  np.zeros((x.shape[1]+1, 2))
-    alasso_parameter  =  np.zeros((x.shape[1]+1, 2))
+        ###########################################################################
+        ### 5. Scoring Function 
+        
+        #combine performance results
+        r2 = np.zeros((tra))
+        mse = np.zeros((tra))
+        
+        for ind in range(tra): #
+            r2[ind] = r2_score(y_test_list, y_predict_list[:, ind])
+            mse[ind] = mean_squared_error(y_test_list, y_predict_list[:, ind])    
+        
+        #the actual scoring function
+        result = [r2, mse]
+        result_score = result[0] #R²
+        result_score[result_score < 0] = 0 #set R² to zero if negative (to not negatively affect the final score)
+        score = (result_score[0:8] * feature_importance)
+        score = np.sum(score/8, axis=1)
+        
+        #bring all results together
+        microbiome_intercept = np.insert(microbiome, 0, "Intercept", axis=0)
+        result = pd.DataFrame(result, index =["R2", "MSE"], columns=models)  
+        score = pd.DataFrame(score, index = microbiome, columns=["score"])
+        feature_importance = pd.DataFrame(feature_importance, index = microbiome, columns = models[0:8])
+        
+        #coefficients
+        lasso_coef = pd.DataFrame(lasso_parameter, index = microbiome_intercept, columns=["l1_lasso_coef",  "clr_lasso_coef"])
+        alasso_coef = pd.DataFrame(alasso_parameter, index = microbiome_intercept, columns=["l1_alasso_coef",  "clr_alasso_coef"])
+        coef = pd.merge(lasso_coef, alasso_coef, left_index=True, right_index=True)
+        
+        #merge results to two final documents
+        full = feature_importance.merge(coef, left_index=True, right_index=True, how = "right")
+        full = score.merge(full, left_index=True, right_index=True, how = "right")
+        intercept = full.loc["Intercept"].to_frame().transpose()
+        full = pd.DataFrame(full.iloc[1:])
+        full.sort_values(by=['score'], inplace=True, ascending=False) #sort
+        rest = pd.concat([result, intercept]) #result.append(intercept) old
+        full_result = pd.concat([rest, full])
+        first_column = full_result.pop("score")
+        full_result.insert(0, 'score', first_column)
+        
+        #additional weighting for the number of models that chose each feature
+        weight = full_result[3:].drop(columns=["score", "l1_lasso_rfr", "clr_lasso_rfr"])
+        weight[abs(weight) > 0] = 1
+        full_result["score"] = full_result["score"] * weight.sum(axis=1)/8
+        #sort again
+        sortscore = full_result[3:].sort_values(by=['score'], ascending=False) #sort
+        perf = full_result[:3]
+        full_result = pd.concat([perf, sortscore])
+        print(100, "%")
+        #return the final score, all model results (performances & feature importances) and the lasso & alasso coefficients combined
+        return full_result
     
-    #l1
-    feature_importance[:, 0] = rfr_importance(x_l1, y)
-    feature_importance[:, 1], feature_importance[:, 2], lasso_parameter[:,0], alasso_parameter[:,0] = alasso_rfr_importance(x_l1, y, alpha_l1)
-    feature_importance[:, 3] = cfs_rfr_importance(x_l1, y)
-    #clr
-    feature_importance[:, 4] = rfr_importance(x_clr, y)
-    feature_importance[:, 5], feature_importance[:, 6], lasso_parameter[:,1], alasso_parameter[:,1] = alasso_rfr_importance(x_clr, y, alpha_clr)
-    feature_importance[:, 7] = cfs_rfr_importance(x_clr, y)
-    ###########################################################################
-    
-    ###########################################################################
-    ### 5. Scoring Function 
-    
-    #combine performance results
-    r2 = np.zeros((tra))
-    mse = np.zeros((tra))
-    
-    for ind in range(tra): #
-        r2[ind] = r2_score(y_test_list, y_predict_list[:, ind])
-        mse[ind] = mean_squared_error(y_test_list, y_predict_list[:, ind])    
-    
-    #the actual scoring function
-    result = [r2, mse]
-    result_score = result[0] #R²
-    result_score[result_score < 0] = 0 #set R² to zero if negative (to not negatively affect the final score)
-    score = (result_score[0:8] * feature_importance)
-    score = np.sum(score/8, axis=1)
-    
-    #bring all results together
-    microbiome_intercept = np.insert(microbiome, 0, "Intercept", axis=0)
-    result = pd.DataFrame(result, index =["R2", "MSE"], columns=models)  
-    score = pd.DataFrame(score, index = microbiome, columns=["score"])
-    feature_importance = pd.DataFrame(feature_importance, index = microbiome, columns = models[0:8])
-    
-    #coefficients
-    lasso_coef = pd.DataFrame(lasso_parameter, index = microbiome_intercept, columns=["l1_lasso_coef",  "clr_lasso_coef"])
-    alasso_coef = pd.DataFrame(alasso_parameter, index = microbiome_intercept, columns=["l1_alasso_coef",  "clr_alasso_coef"])
-    coef = pd.merge(lasso_coef, alasso_coef, left_index=True, right_index=True)
-    
-    #merge results to two final documents
-    full = feature_importance.merge(coef, left_index=True, right_index=True, how = "right")
-    full = score.merge(full, left_index=True, right_index=True, how = "right")
-    intercept = full.loc["Intercept"].to_frame().transpose()
-    full = pd.DataFrame(full.iloc[1:])
-    full.sort_values(by=['score'], inplace=True, ascending=False) #sort
-    rest = pd.concat([result, intercept]) #result.append(intercept) old
-    full_result = pd.concat([rest, full])
-    first_column = full_result.pop("score")
-    full_result.insert(0, 'score', first_column)
-    
-    #additional weighting for the number of models that chose each feature
-    weight = full_result[3:].drop(columns=["score", "l1_lasso_rfr", "clr_lasso_rfr"])
-    weight[abs(weight) > 0] = 1
-    full_result["score"] = full_result["score"] * weight.sum(axis=1)/8
-    #sort again
-    sortscore = full_result[3:].sort_values(by=['score'], ascending=False) #sort
-    perf = full_result[:3]
-    full_result = pd.concat([perf, sortscore])
-    print(100, "%")
-    #return the final score, all model results (performances & feature importances) and the lasso & alasso coefficients combined
-    return full_result
+    finally:
+        # restore caller's RNG state
+        np.random.set_state(_np_state)
     ###########################################################################
 
 
