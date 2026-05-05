@@ -6,14 +6,14 @@
 - Research Paper: [https://doi.org/10.1093/bioinformatics/btad749 ](https://doi.org/10.1093/bioinformatics/btad749 )
 - cfs.py is an implementation of the Correlation Based Feature Selection by Mark Hall (https://researchcommons.waikato.ac.nz/handle/10289/1024)
 
-Coracle is an artificial intelligence framework that utilizes an ensemble approach of different feature selection methods and machine learning models to identify bacteria strains associated with continuous physiological variables. It is specifically designed to maximize the utility of small and medium-sized datasets, such as those typically found in coral microbiome research. The framework is optimized for the taxonomic levels of "Family" and "Order," which provide a balanced level of detail and feature count for robust analysis.The core logic of the framework is implemented in the file named coracle.py. Comprehensive implementation details and guidance are provided in the Coracle Research Paper.
+Coracle is an artificial intelligence framework that utilizes an ensemble approach of different feature selection methods and machine learning models to identify bacteria strains associated with continuous physiological variables. It is specifically designed to maximize the utility of small and medium-sized datasets, such as those typically found in coral microbiome research. The framework is optimized for the taxonomic levels of "Family" and "Order" which provide a balanced level of detail and feature count for robust analysis. We recommend using not more than a few hundred features. The core logic of the framework is implemented in the file named coracle.py. Comprehensive implementation details and guidance are provided in the Coracle Research Paper.
 
 ### Description of Methodology
 The goal of this framework is to consistently select bacterial strains associated with specific traits, such as heat stress resistance, while avoiding the pitfalls of overfitting and high dimensionality.
-Normalization: The system applies two distinct normalization methods, including relative abundance ($L_1$-normalization) and centered log ratio (CLR), to the input feature counts.
-Ensemble Feature Selection: Within a leave-one-out cross-validation loop, the framework employs three different selection methods: Lasso, Adaptive Lasso (Alasso), and Correlation-based Feature Selection (CFS).
-Machine Learning Modeling: Selected features are processed using Random Forest Regression to evaluate their predictive power and importance.
-Scoring System: The results are aggregated by a final score that incorporates the performance of the various machine learning models, the respective feature importance, and the frequency with which a feature was selected across different models.
+1. Normalization: The system applies two distinct normalization methods, including relative abundance ($L_1$-normalization) and centered log ratio (CLR), to the input feature counts.
+2. Ensemble Feature Selection: Within a leave-one-out cross-validation loop, the framework employs three different selection methods: Lasso, Adaptive Lasso (Alasso), and Correlation-based Feature Selection (CFS).
+3. Machine Learning Modeling: Selected features are processed using Random Forest Regression to evaluate their predictive power and importance.
+4. Scoring System: The results are aggregated by a final score that incorporates the performance of the various machine learning models, the respective feature importance, and the frequency with which a feature was selected across different models.
 
 ### Input Format
 The framework requires two primary input datasets to execute the analysis:
@@ -28,13 +28,13 @@ The framework requires two primary input datasets to execute the analysis:
 
 ### Core Parameters
 The analysis can be customized using the following parameters found in the coracle function:
-alpha_l1: This is the lambda or alpha value for $L_1$-lasso traverses.
-alpha_clr: This is the lambda or alpha value for CLR-lasso traverses.
-random_state: This is an optional integer seed used to help making the results reproducible and deterministic (not supported for alasso so far).
+- alpha_l1: This is the lambda or alpha value for $L_1$-lasso traverses.
+- alpha_clr: This is the lambda or alpha value for CLR-lasso traverses.
+- random_state: This is an optional integer seed used to help making the results reproducible and deterministic (not supported for alasso so far).
 
 ### Output and Results
 The framework produces a comprehensive table that serves as the final result of the analysis.
-Scoring and Ranking: Bacterial strains are ranked according to a final score that weights their importance across all ensemble models.
-Model Performance: The output includes the performance metrics for each model traverse, specifically the $R^2$ score and Mean Squared Error (MSE).
-Coefficients: Regression coefficients from Lasso and Adaptive Lasso are provided to offer insights into the direction and strength of the association for each identified strain.
-Feature Importance: Specific importance values from the Random Forest Regression models are included for each feature.
+- Scoring and Ranking: Bacterial strains are ranked according to a final score that weights their importance across all ensemble models.
+- Model Performance: The output includes the performance metrics for each model traverse, specifically the $R^2$ score and Mean Squared Error (MSE).
+- Coefficients: Regression coefficients from Lasso and Adaptive Lasso are provided to offer insights into the direction and strength of the association for each identified strain.
+- Feature Importance: Specific importance values from the Random Forest Regression models are included for each feature.
