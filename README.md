@@ -1,10 +1,10 @@
 ## Coracle - A Machine Learning Framework to Identify Bacteria Associated with Continous Variables 
 
 ### Ensemble Machine Learning for Coral Microbiome Analysis
-Open access web server: [micportal.org ](https://micportal.org)
-Zenodo: [![DOI](https://zenodo.org/badge/676863744.svg)](https://doi.org/10.5281/zenodo.19050205)
-Research Paper: [https://doi.org/10.1093/bioinformatics/btad749 ](https://doi.org/10.1093/bioinformatics/btad749 )
-cfs.py is an implementation of the Correlation Based Feature Selection by Mark Hall (https://researchcommons.waikato.ac.nz/handle/10289/1024)
+  Open access web server: [micportal.org ](https://micportal.org)
+  Zenodo: [![DOI](https://zenodo.org/badge/676863744.svg)](https://doi.org/10.5281/zenodo.19050205)
+  Research Paper: [https://doi.org/10.1093/bioinformatics/btad749 ](https://doi.org/10.1093/bioinformatics/btad749 )
+  cfs.py is an implementation of the Correlation Based Feature Selection by Mark Hall (https://researchcommons.waikato.ac.nz/handle/10289/1024)
 
 Coracle is an artificial intelligence framework that utilizes an ensemble approach of different feature selection methods and machine learning models to identify bacteria strains associated with continuous physiological variables. It is specifically designed to maximize the utility of small and medium-sized datasets, such as those typically found in coral microbiome research. The framework is optimized for the taxonomic levels of "Family" and "Order," which provide a balanced level of detail and feature count for robust analysis.The core logic of the framework is implemented in the file named coracle.py. Comprehensive implementation details and guidance are provided in the Coracle Research Paper.
 
